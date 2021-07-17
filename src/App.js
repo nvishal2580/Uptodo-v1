@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import "./App.css";
+import LandingPage from "./components/LandingPage/LandingPage";
+import RegisterPage from "./components/AuthPages/RegisterPage";
+import LoginPage from "./components/AuthPages/LoginPage";
+import Dashboard from "./components/Dashboard/Dashboard";
+import { getUser } from "./store/auth";
+import "react-toastify/dist/ReactToastify.css";
+import store from "./store/store";
 
-function App() {
+import ProtectedRoute from "./components/AuthPages/protectedRoute";
+
+const App = () => {
+  const getComponent = () => {
+    const currentUser = getUser(store.getState());
+
+    const userId = localStorage.getItem("userId");
+    if (currentUser !== undefined && userId !== undefined) {
+      return <Dashboard />;
+    } else {
+      return <Redirect to="/login" />;
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+        <Route path="/login" component={LoginPage} />
+        <Route path="/register" component={RegisterPage} />
+        <ProtectedRoute path="/app/" component={Dashboard}></ProtectedRoute>
+        <Route path="/" component={LandingPage} />
+      </Switch>
+    </Router>
   );
-}
+};
 
 export default App;
