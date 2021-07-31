@@ -8,6 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { RadioGroup, FormControlLabel, Radio } from "@material-ui/core";
 import { CreateNewProject } from "./ApiCalls";
+import { toast } from "react-toastify";
 function AddProjectDialog({ addProjectDilog, setAddProjectDialog }) {
   const [projectType, setProjectType] = useState("new");
   const [projectName, setProjectName] = useState("");
@@ -18,12 +19,18 @@ function AddProjectDialog({ addProjectDilog, setAddProjectDialog }) {
   };
 
   const handleSubmit = () => {
+    if (projectName.length < 3) {
+      toast.info("Project name length should be atleast 4 char long");
+      return;
+    }
     if (projectType === "new") {
       const ProjectData = {
         name: projectName,
         details: projectDetails,
       };
       CreateNewProject(ProjectData);
+      setProjectDetails("");
+      setProjectName("");
       handleClose();
       return;
     }

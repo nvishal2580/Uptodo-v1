@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import "reset-css";
 import firebase, { db } from "../../../firebase/firebase";
 import { CircularProgress } from "@material-ui/core";
+import Spinner from "../../Common/Spinner";
 
 const Container = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ const Container = styled.div`
   min-height: calc(100vh - 110px);
   /* max-width: calc(100% - 250px); */
 `;
-function Project({ data, projectId }) {
+function Project({ data, projectId, loading: dataLoading }) {
   const [tasks, setTasks] = useState({});
   const [columns, setColumns] = useState({});
   const [columnOrder, setColumnOrder] = useState([]);
@@ -248,7 +249,7 @@ function Project({ data, projectId }) {
 
   return (
     <>
-      {loading && <CircularProgress />}
+      {loading && <Spinner />}
       {!loading && (
         <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
           <Droppable
@@ -264,9 +265,6 @@ function Project({ data, projectId }) {
               >
                 {columnOrder &&
                   columnOrder.map((columnId, index) => {
-                    console.log("columnOrder", columnOrder);
-                    console.log("tasks", tasks);
-                    console.log("columns", columns);
                     const column = columns[columnId];
                     const columnTasks = column.taskIds.map(
                       (taskId) => tasks[taskId]
@@ -286,12 +284,14 @@ function Project({ data, projectId }) {
                       />
                     );
                   })}
-                <AddTask
-                  isDraggingOver={snapshot.isDraggingOver}
-                  title="ADD Column"
-                  type="column"
-                  handleAddColumn={handleAddColumn}
-                />
+                {!loading && (
+                  <AddTask
+                    isDraggingOver={snapshot.isDraggingOver}
+                    title="ADD Column"
+                    type="column"
+                    handleAddColumn={handleAddColumn}
+                  />
+                )}
                 {provided.placeholder}
               </Container>
             )}

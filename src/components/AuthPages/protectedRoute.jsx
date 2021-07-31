@@ -1,30 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Redirect, Route } from "react-router";
 import { auth } from "../../firebase/firebase";
 import { useHistory } from "react-router-dom";
-import { getUser } from "./../../store/auth";
-import store from "../../store/store";
+import { AuthContext } from "./Auth";
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
+const ProtectedRoute = ({ component: RouteComponent, ...rest }) => {
   const history = useHistory();
 
-  const isAuthenticated = () => {
-    const userData = getUser(store.getState());
-    const userId = localStorage.getItem("userId");
-    if (userData.isAuthenticated === true || userId !== null) return true;
-    else return false;
-  };
+  const { currentUser } = useContext(AuthContext);
 
   return (
     <Route
       {...rest}
-      render={(prop) => {
-        if (isAuthenticated()) {
-          return <Component {...prop} />;
-        } else {
-          history.push("/");
-        }
-      }}
+      render={(routeProps) =>
+        !!currentUser ? (
+          <RouteComponent {...routeProps} />
+        ) : (
+          <Redirect to={"/login"} />
+        )
+      }
     />
   );
 };

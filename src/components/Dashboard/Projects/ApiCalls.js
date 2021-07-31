@@ -1,7 +1,5 @@
 import firebase from "../../../firebase/firebase";
 import { auth, db } from "./../../../firebase/firebase";
-import store from "../../../store/store";
-import { addProject } from "../../../store/project";
 
 export const CreateNewProject = async (data) => {
   const userId = auth.currentUser.uid;
@@ -11,6 +9,7 @@ export const CreateNewProject = async (data) => {
     columnOrder: [],
     tasks: {},
     columns: {},
+    members: [],
   };
   const docRef = await db.collection("projects").add(projectData);
 
@@ -41,4 +40,8 @@ export const FetchProjectsFromFirebase = async () => {
     console.log("data in list", projectDataList);
     return projectDataList;
   });
+};
+
+const joinExistProject = async (data) => {
+  if (data.projectId == null) return;
 };

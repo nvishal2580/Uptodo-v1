@@ -19,6 +19,7 @@ import AddCircleOutlined from "@material-ui/icons/AddCircleOutlined";
 import AddProjectDialog from "./Projects/AddProject";
 import { useStore } from "react-redux";
 import { auth, db } from "../../firebase/firebase";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   sidebar_root: {},
@@ -50,6 +51,7 @@ export default function NestedList({ showSidebar }) {
   const store = useStore();
   const [dataList, setDataList] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
     const unsubscribe = getProjectList();
@@ -64,7 +66,9 @@ export default function NestedList({ showSidebar }) {
       const projectArray = docSnapshot.data().projects;
       setDataList(projectArray);
       console.log(projectArray);
+      history.push("/app/inbox");
     });
+
     setLoading(false);
     return unsubscribe;
   };

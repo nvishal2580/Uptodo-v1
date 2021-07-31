@@ -8,7 +8,6 @@ import AddTask from "./AddTask";
 import SortIcon from "@material-ui/icons/Sort";
 import ChatBubbleOutlineOutlinedIcon from "@material-ui/icons/ChatBubbleOutlineOutlined";
 import IconButton from "@material-ui/core/IconButton";
-import { blue } from "@material-ui/core/colors";
 
 const useStyles = makeStyles({
   title: {
@@ -38,7 +37,6 @@ const useStyles = makeStyles({
 function Inbox(props) {
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const [sortBy, setSortBy] = useState(true);
 
   const handleChange = (event, newVal) => {
     setValue(newVal);
@@ -61,7 +59,7 @@ function Inbox(props) {
               </IconButton>
             </span>
             <span className={classes.iconWrapper}>
-              <IconButton onClick={() => setSortBy(!sortBy)}>
+              <IconButton>
                 <SortIcon />
               </IconButton>
             </span>
@@ -82,7 +80,7 @@ function Inbox(props) {
             </Tabs>
           </Paper>
           {value === 0 ? <AddTask /> : ""}
-          <TasksList indexId={value} sortBy={sortBy} />
+          <TasksList indexId={value} />
         </Grid>
       </Grid>
       <Grid item xs={2}></Grid>

@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import store from "./store/store";
 import { Provider } from "react-redux";
-import Profile from "./components/Dashboard/Profile/Profile";
 
 ReactDOM.render(
   <React.StrictMode>

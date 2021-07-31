@@ -75,8 +75,9 @@ const LoginPage = () => {
           console.log(user);
           localStorage.setItem("userId", user.uid);
           dispatch(setUser({ ...user }));
+          console.log("user at login page");
+          history.push("/app/inbox");
           setLoading(false);
-          history.push("/app");
         })
         .catch((error) => {
           toast.error("Invalid Email or Password !", { autoClose: 2000 });
